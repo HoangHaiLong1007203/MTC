@@ -5,15 +5,18 @@ export default function App() {
   const { width, height } = Dimensions.get("window");
   const pixelRatio = PixelRatio.get();
 
-  // chuyển px thật sang dp
+  // chuyển px sang dp
   const widthDp = width / pixelRatio;
   const heightDp = height / pixelRatio;
 
-  // baseline Android: 360dp
-  const minWidthDp = 360;
+  const baselineWidthDp = 360; // Android baseline
+  const baselineHeightDp = 640; // tương ứng tỉ lệ portrait ~9:16
 
-  // tính scale để ép về 360dp
-  const scaleFactor = widthDp < minWidthDp ? 1 : widthDp / minWidthDp;
+  // Tính width để giữ tỷ lệ portrait dựa trên chiều cao
+  let portraitWidth = height * (baselineWidthDp / baselineHeightDp);
+
+  // Nếu màn hình quá nhỏ (mobile nhỏ hơn baseline), cho chiếm full chiều ngang
+  if (portraitWidth > width) portraitWidth = width;
 
   return (
     <View style={styles.outer}>
@@ -21,9 +24,8 @@ export default function App() {
         style={[
           styles.inner,
           {
-            height: height / scaleFactor,
-            width: width / scaleFactor,
-            transform: [{ scale: scaleFactor }],
+            height: height,          // full chiều cao màn
+            width: portraitWidth,    // giữ tỷ lệ portrait
           },
         ]}
       >
@@ -36,7 +38,7 @@ export default function App() {
 const styles = StyleSheet.create({
   outer: {
     flex: 1,
-    backgroundColor: "#000", // nền ngoài đen cho giống giả lập mobile
+    backgroundColor: "#000", // nền ngoài đen
     justifyContent: "center",
     alignItems: "center",
   },
