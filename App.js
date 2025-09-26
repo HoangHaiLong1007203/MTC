@@ -1,12 +1,19 @@
-import { View, StyleSheet, Dimensions } from "react-native";
+import { View, StyleSheet, Dimensions, PixelRatio } from "react-native";
 import AppNavigation from "./Navigation/Navigation";
 
 export default function App() {
   const { width, height } = Dimensions.get("window");
+  const pixelRatio = PixelRatio.get();
 
-  // tỷ lệ màn hình mobile chuẩn 1080x2220
-  const aspectRatio = 1080 / 2220; // ~0.486
-  const targetWidth = height * aspectRatio;
+  // chuyển px thật sang dp
+  const widthDp = width / pixelRatio;
+  const heightDp = height / pixelRatio;
+
+  // baseline Android: 360dp
+  const minWidthDp = 360;
+
+  // tính scale để ép về 360dp
+  const scaleFactor = widthDp < minWidthDp ? 1 : widthDp / minWidthDp;
 
   return (
     <View style={styles.outer}>
@@ -14,8 +21,9 @@ export default function App() {
         style={[
           styles.inner,
           {
-            height: height,
-            width: width < targetWidth ? width : targetWidth,
+            height: height / scaleFactor,
+            width: width / scaleFactor,
+            transform: [{ scale: scaleFactor }],
           },
         ]}
       >
@@ -28,7 +36,7 @@ export default function App() {
 const styles = StyleSheet.create({
   outer: {
     flex: 1,
-    backgroundColor: "#000", // nền ngoài đen
+    backgroundColor: "#000", // nền ngoài đen cho giống giả lập mobile
     justifyContent: "center",
     alignItems: "center",
   },
@@ -36,10 +44,5 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     borderRadius: 12,
     overflow: "hidden",
-    elevation: 5,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
   },
 });
