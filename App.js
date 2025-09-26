@@ -3,7 +3,10 @@ import AppNavigation from "./Navigation/Navigation";
 
 export default function App() {
   const { width, height } = Dimensions.get("window");
-  const maxWidth = 430;
+
+  // tỷ lệ màn hình mobile chuẩn 1080x2220
+  const aspectRatio = 1080 / 2220; // ~0.486
+  const targetWidth = height * aspectRatio;
 
   return (
     <View style={styles.outer}>
@@ -12,7 +15,7 @@ export default function App() {
           styles.inner,
           {
             height: height,
-            width: width > maxWidth ? maxWidth : width, // nhỏ hơn hoặc bằng 430
+            width: width < targetWidth ? width : targetWidth,
           },
         ]}
       >
@@ -25,7 +28,7 @@ export default function App() {
 const styles = StyleSheet.create({
   outer: {
     flex: 1,
-    backgroundColor: "#000",
+    backgroundColor: "#000", // nền ngoài đen
     justifyContent: "center",
     alignItems: "center",
   },
@@ -33,8 +36,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     borderRadius: 12,
     overflow: "hidden",
-    elevation: 5, // shadow Android
-    shadowColor: "#000", // shadow iOS
+    elevation: 5,
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 4,
