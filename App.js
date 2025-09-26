@@ -14,10 +14,8 @@ export default function App() {
     >
       <div
         style={{
-          height: "100%",
-          width: "100%",
-          maxWidth: "430px",      // để không vượt quá khổ mobile
-          aspectRatio: "9/16",    // giữ đứng khi ở màn to
+          height: "100%",             // cao = full màn
+          width: "min(100%, 430px)",  // tối đa 430px
           background: "#fff",
           boxShadow: "0 0 20px rgba(0,0,0,0.3)",
           borderRadius: "12px",
